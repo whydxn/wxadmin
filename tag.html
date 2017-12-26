@@ -10,20 +10,6 @@
 <div class="layui-layout layui-layout-admin">
   <div class="layui-header">
     <div class="layui-logo">SEA后台管理系统</div>
-    <!-- 头部区域（可配合layui已有的水平导航） -->
-<!--    <ul class="layui-nav layui-layout-left">
-      <li class="layui-nav-item"><a href="">控制台</a></li>
-      <li class="layui-nav-item"><a href="">商品管理</a></li>
-      <li class="layui-nav-item"><a href="">用户</a></li>
-      <li class="layui-nav-item">
-        <a href="javascript:;">其它系统</a>
-        <dl class="layui-nav-child">
-          <dd><a href="">邮件管理</a></dd>
-          <dd><a href="">消息管理</a></dd>
-          <dd><a href="">授权管理</a></dd>
-        </dl>
-      </li>
-    </ul> -->
     <ul class="layui-nav layui-layout-right">
       <li class="layui-nav-item">
         <a href="javascript:;">
@@ -44,21 +30,10 @@
       <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
       <ul class="layui-nav layui-nav-tree"  lay-filter="test">
         <li class="layui-nav-item layui-nav-itemed">
-          <a class="" href="javascript:;">粉丝管理</a>
-<!--          <dl class="layui-nav-child">
-            <dd><a href="javascript:;">列表一</a></dd>
-            <dd><a href="javascript:;">列表二</a></dd>
-            <dd><a href="javascript:;">列表三</a></dd>
-            <dd><a href="">超链接</a></dd>
-          </dl>  -->
+          <a class="" href="index.html">粉丝管理</a>
         </li>
         <li class="layui-nav-item">
-          <a href="tag.html">标签管理</a>
-<!--          <dl class="layui-nav-child">
-            <dd><a href="javascript:;">列表一</a></dd>
-            <dd><a href="javascript:;">列表二</a></dd>
-            <dd><a href="">超链接</a></dd>
-          </dl>   -->
+          <a href="javascript:;">标签管理</a>
         </li>
         <li class="layui-nav-item"><a href="Javascript:;">接单人员管理</a></li>
       </ul>
@@ -66,24 +41,21 @@
   </div>
   
   <div class="layui-body">
-    <!-- 内容主体区域 -->
-    <table class="layui-table" id="datatable" lay-filter="demo"></table>
- 
-	<script type="text/html" id="barDemo">
-	  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
-	  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-	  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-	</script>
-	<button class="layui-btn" 
-			style="margin-top: 30px; margin-left:140px;"
-			data-type="updatedata">
-			更新数据
-	</button>
-	<button class="layui-btn layui-btn-normal" 
-			style="margin-top: 30px; margin-left:340px;"
-			data-type="reloaddata">
-			重新加载
-	</button>
+  <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;height:110px">
+  <legend>标签操作</legend>
+	  <div>
+		<button class="layui-btn" 
+				style="margin-top: 10px; margin-left:140px;"
+				data-type="updatedata">
+				更新数据
+		</button>
+		<button class="layui-btn layui-btn-normal" 
+				style="margin-top: 10px; margin-left:340px;"
+				data-type="reloaddata">
+				重新加载
+		</button>
+	  </div>
+	</fieldset>
   </div>
   
   <div class="layui-footer">
@@ -193,84 +165,12 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
     }
   });
   
-  //执行一个轮播实例
-/*  carousel.render({
-    elem: '#test1'
-    ,width: '100%' //设置容器宽度
-    ,height: 200
-    ,arrow: 'none' //不显示箭头
-    ,anim: 'fade' //切换动画方式
-  });
-  
-  //将日期直接嵌套在指定容器中
-  var dateIns = laydate.render({
-    elem: '#laydateDemo'
-    ,position: 'static'
-    ,calendar: true //是否开启公历重要节日
-    ,mark: { //标记重要日子
-      '0-10-14': '生日'
-      ,'2017-11-11': '剁手'
-      ,'2017-11-30': ''
-    } 
-    ,done: function(value, date, endDate){
-      if(date.year == 2017 && date.month == 11 && date.date == 30){
-        dateIns.hint('一不小心就月底了呢');
-      }
-    }
-    ,change: function(value, date, endDate){
-      layer.msg(value)
-    }
-  });
-  
-  //分页
-  laypage.render({
-    elem: 'pageDemo' //分页容器的id
-    ,count: 100 //总页数
-    ,skin: '#1E9FFF' //自定义选中色值
-    //,skip: true //开启跳页
-    ,jump: function(obj, first){
-      if(!first){
-        layer.msg('第'+ obj.curr +'页');
-      }
-    }
-  });
-  
-  //上传
-  upload.render({
-    elem: '#uploadDemo'
-    ,url: '' //上传接口
-    ,done: function(res){
-      console.log(res)
-    }
-  });*/
-  
   //底部信息
   var footerTpl = lay('#footer')[0].innerHTML;
   lay('#footer')[0].innerHTML = layui.laytpl(footerTpl).render({});
 
 });
 
-  //更新用户数据
-  function updateUserdata(){
-	var xmlhttp;
-	if (window.XMLHttpRequest)
-	  {// code for IE7+, Firefox, Chrome, Opera, Safari
-	  xmlhttp=new XMLHttpRequest();
-	  }
-	else
-	  {// code for IE6, IE5
-	  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-	  }
-	xmlhttp.onreadystatechange=function()
-	  {
-	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
-		{
-		alert("用户数据更新完成，请点击重新载入！");
-		}
-	  }
-	xmlhttp.open("GET","/logic/getUserlist.php",true);
-	xmlhttp.send();
-  }
 </script>
 </body>
 </html>
