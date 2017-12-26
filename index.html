@@ -67,14 +67,23 @@
   
   <div class="layui-body">
     <!-- 内容主体区域 -->
-    <table class="layui-table" id="test" lay-filter="demo"></table>
+    <table class="layui-table" id="datatable" lay-filter="demo"></table>
  
 	<script type="text/html" id="barDemo">
 	  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
 	  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
 	  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 	</script>
-
+	<button class="layui-btn" 
+			style="margin-top: 30px; margin-left:140px;"
+			data-type="updatedata">
+			更新数据
+	</button>
+	<button class="layui-btn layui-btn-normal" 
+			style="margin-top: 30px; margin-left:340px;"
+			data-type="reloaddata">
+			重新加载
+	</button>
   </div>
   
   <div class="layui-footer">
@@ -93,17 +102,18 @@ layui.config({
   version: '1512984638033' //为了更新 js 缓存，可忽略
 });
  
-layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element'], function(){
+layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element', 'jquery'], function(){
   var laydate = layui.laydate //日期
   ,laypage = layui.laypage //分页
-  layer = layui.layer //弹层
+  ,layer = layui.layer //弹层
   ,table = layui.table //表格
   ,carousel = layui.carousel //轮播
   ,upload = layui.upload //上传
-  ,element = layui.element; //元素操作
+  ,element = layui.element //元素操作
+  ,$ = layui.$;
   
   //向世界问个好
-  layer.msg('Hello World');
+//  layer.msg('Hello World');
   
   //监听Tab切换
   element.on('tab(demo)', function(data){
@@ -113,8 +123,8 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   
   //执行一个 table 实例
   table.render({
-    elem: '#test'
-    ,height: 540
+    elem: '#datatable'
+    ,height: 400
     ,url: '/data/getdata.php' //数据接口
     ,page: true //开启分页
       ,cols: [[ //表头
@@ -135,6 +145,37 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
       ]]
   });
   
+  var active = {
+    updatedata: function(){
+      $.get("/logic/getUserlist.php",function(data,status){
+	    if(status == "success")
+          alert("数据交互成功，请重新加载！");
+		else
+		  alert("数据更新失败！");  
+  });
+    }	
+	,reloaddata: function(){
+    //  var demoReload = $('#demoReload');
+      
+      //执行重载
+      table.reload('datatable', {
+        page: {
+          curr: 1 //重新从第 1 页开始
+        }
+        ,where: {
+          key: {
+       //     id: demoReload.val()
+          }
+        }
+      });
+    }
+  };
+  
+  $('.layui-btn').on('click', function(){
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
+  });
+  
   //监听工具条
   table.on('tool(demo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
     var data = obj.data //获得当前行数据
@@ -153,7 +194,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   });
   
   //执行一个轮播实例
-  carousel.render({
+/*  carousel.render({
     elem: '#test1'
     ,width: '100%' //设置容器宽度
     ,height: 200
@@ -201,13 +242,35 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
     ,done: function(res){
       console.log(res)
     }
-  });
+  });*/
   
   //底部信息
   var footerTpl = lay('#footer')[0].innerHTML;
   lay('#footer')[0].innerHTML = layui.laytpl(footerTpl).render({});
+
 });
 
+  //更新用户数据
+  function updateUserdata(){
+	var xmlhttp;
+	if (window.XMLHttpRequest)
+	  {// code for IE7+, Firefox, Chrome, Opera, Safari
+	  xmlhttp=new XMLHttpRequest();
+	  }
+	else
+	  {// code for IE6, IE5
+	  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+	xmlhttp.onreadystatechange=function()
+	  {
+	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+		alert("用户数据更新完成，请点击重新载入！");
+		}
+	  }
+	xmlhttp.open("GET","/logic/getUserlist.php",true);
+	xmlhttp.send();
+  }
 </script>
 </body>
 </html>
