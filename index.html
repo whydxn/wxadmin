@@ -70,9 +70,9 @@
     <table class="layui-table" id="datatable" lay-filter="demo"></table>
  
 	<script type="text/html" id="barDemo">
-	  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
-	  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-	  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+<!--	  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>  -->
+	  <a class="layui-btn layui-btn-xs" lay-event="edit">更新标签</a>
+<!--	  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>  -->
 	</script>
 	<button class="layui-btn" 
 			style="margin-top: 30px; margin-left:140px;"
@@ -140,14 +140,14 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 		  ,{field: 'subscribe_time',   title: '订阅时间', width: 135, sort: true}
 		  ,{field: 'remark',           title: '备注名称', width: 135}
 		  ,{field: 'groupid',          title: '组',       width: 135}
-		  ,{field: 'tagid_list',       title: '标签',     width: 135, sort: true}
+		  ,{field: 'tagid_list',       title: '标签',     width: 135, sort: true, edit: 'text'}
           ,{fixed: 'right', width: 165, align:'center', toolbar: '#barDemo'}
       ]]
   });
   
   var active = {
     updatedata: function(){
-      $.get("/logic/getUserlist.php",function(data,status){
+      $.get("/logic/user_getUserlist.php",function(data,status){
 	    if(status == "success")
           alert("数据交互成功，请重新加载！");
 		else
@@ -189,60 +189,26 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
         //向服务端发送删除指令
       });
     } else if(layEvent === 'edit'){
-      layer.msg('编辑操作');
+      var data = obj.data //得到所在行所有键值
+	  
+	  $.get("/logic/tag_tagManage.php?operation=setusertag&param=" + data.openid +"&settagid=" + data.tagid_list,function(data,status){
+	    if(status == "success"){
+          alert("删除结果："+data);
+		} else {
+		  alert("数据通信失败！");
+        }		  
+      });
     }
   });
   
-  //执行一个轮播实例
-/*  carousel.render({
-    elem: '#test1'
-    ,width: '100%' //设置容器宽度
-    ,height: 200
-    ,arrow: 'none' //不显示箭头
-    ,anim: 'fade' //切换动画方式
+  //监听单元格编辑
+  table.on('edit(demo)', function(obj){
+    var value = obj.value //得到修改后的值
+    ,data = obj.data //得到所在行所有键值
+    ,field = obj.field; //得到字段
+    layer.msg('[ID: '+ data.openid +'] ' + field + ' 字段更改为：'+ value);
   });
-  
-  //将日期直接嵌套在指定容器中
-  var dateIns = laydate.render({
-    elem: '#laydateDemo'
-    ,position: 'static'
-    ,calendar: true //是否开启公历重要节日
-    ,mark: { //标记重要日子
-      '0-10-14': '生日'
-      ,'2017-11-11': '剁手'
-      ,'2017-11-30': ''
-    } 
-    ,done: function(value, date, endDate){
-      if(date.year == 2017 && date.month == 11 && date.date == 30){
-        dateIns.hint('一不小心就月底了呢');
-      }
-    }
-    ,change: function(value, date, endDate){
-      layer.msg(value)
-    }
-  });
-  
-  //分页
-  laypage.render({
-    elem: 'pageDemo' //分页容器的id
-    ,count: 100 //总页数
-    ,skin: '#1E9FFF' //自定义选中色值
-    //,skip: true //开启跳页
-    ,jump: function(obj, first){
-      if(!first){
-        layer.msg('第'+ obj.curr +'页');
-      }
-    }
-  });
-  
-  //上传
-  upload.render({
-    elem: '#uploadDemo'
-    ,url: '' //上传接口
-    ,done: function(res){
-      console.log(res)
-    }
-  });*/
+
   
   //底部信息
   var footerTpl = lay('#footer')[0].innerHTML;
