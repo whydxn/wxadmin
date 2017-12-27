@@ -35,77 +35,39 @@
         <li class="layui-nav-item">
           <a href="javascript:;">标签管理</a>
         </li>
-        <li class="layui-nav-item"><a href="menu.html">菜单管理</a></li>
+        <li class="layui-nav-item"><a href="Javascript:;">菜单管理</a></li>
       </ul>
     </div>
   </div>
   
   <div class="layui-body">
     <div style="float:left">
-  <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;height:360px;">
-  <legend>标签操作</legend>
-	  <div >
-		<button class="layui-btn" 
-				style="margin-top: 10px;"
-				data-type="showtag">
-				显示标签
-		</button>
-	
-		<textarea class="site-demo-text" 
-		  style="margin-left:200px;height:300px;width:300px;"
-		  id="tagdata">
-提示：当前无内容！！！
-	    </textarea>
-	  </div>
-	</fieldset>
-	</div>
-	<fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;height:110px">
-      <legend>删除操作</legend>
-	  <div>
-		<label class="layui-form-label">需要删除的tag_id</label>
-		<div class="layui-input-inline">
-        <input type="tel" id="delete" autocomplete="off" class="layui-input">
-        </div>
-		<button class="layui-btn layui-btn-normal" 
-				style="margin-top: 10px; margin-left:100px;"
-				data-type="deltag">
-				删除标签
-		</button>
-	  </div>
-	</fieldset>
-	<fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;height:110px">
-		<legend>更新操作</legend>
-		<div>
-		<label class="layui-form-label">需要更新的tag_id</label>
-		<div class="layui-input-inline">
-		<input type="tel" name="phone" lay-verify="required|phone" autocomplete="off" class="layui-input">
-		</div>
+	  <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;height:360px;">
+	  <legend>菜单操作</legend>
+		  <div >
+			<button class="layui-btn" 
+					style="margin-top: 10px;"
+					data-type="showmenu">
+					显示菜单
+			</button>
 		
-		<button class="layui-btn layui-btn-normal" 
-				style="margin-top: 10px; margin-left:100px;"
-				data-type="updatetag">
-				更新标签
-		</button>
-		</div>
-	</fieldset>
-	
-	<fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;height:110px">
+			<textarea class="site-demo-text" 
+			  style="margin-left:200px;height:300px;width:300px;"
+			  id="tagdata">
+	提示：当前无内容！！！
+			</textarea>
+		  </div>
+		</fieldset>
+		<fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;height:110px">
 		<legend>添加操作</legend>
-		<div>
-		<label class="layui-form-label">tag名称</label>
-		<div class="layui-input-inline">
-		<input type="tel" id="create"  autocomplete="off" class="layui-input">
-		</div>
-		
+        <p>将根据/logic/menu_menuManage.php中的配置进行更新。先删除再创建的过程！</p>		
 		<button class="layui-btn layui-btn-normal" 
 				style="margin-top: 10px; margin-left:100px;"
-				data-type="createtag">
-				新建标签
+				data-type="updatemenu">
+				更新菜单
 		</button>
 		</div>
-	</fieldset>
-	<div>
-
+	    </fieldset>
 	</div>
   </div>
   
@@ -130,8 +92,8 @@ layui.use(['layer'], function(){
   ,$ = layui.$;
   
   var active = {
-    showtag: function(){
-	  $.get("/logic/tag_tagManage.php?operation=showtag",function(data,status){
+    showmenu: function(){
+	  $.get("/logic/menu_menuManage.php?operation=showmenu",function(data,status){
 	    if(status == "success"){
 		  $("#tagdata").html(data);
           alert("数据交互成功，请重新加载！");
@@ -140,29 +102,16 @@ layui.use(['layer'], function(){
         }		  
       });
 	}
-	,deltag: function(){
+	,updatemenu: function(){
       var deletetagid = $("#delete").val();
-	  $.get("/logic/tag_tagManage.php?operation=deletetag&param=" + deletetagid,function(data,status){
+	  $.get("/logic/menu_menuManage.php?operation=updatemenu",function(data,status){
 	    if(status == "success"){
-          alert("删除结果："+data);
+          alert("数据交互成功，请重新加载！");
 		} else {
-		  alert("数据通信失败！");
+		  alert("数据更新失败！");
         }		  
       });
     }
-	,updatetag: function(){
-	  alert("null");
-	}
-	,createtag: function(){
-	  var newtagname = $("#create").val();
-	  $.get("/logic/tag_tagManage.php?operation=createtag&param=" + newtagname,function(data,status){
-	    if(status == "success"){
-          alert("创建结果："+data);
-		} else {
-		  alert("数据通信失败！");
-        }		  
-      });
-	}
   };
   
   $('.layui-btn').on('click', function(){
