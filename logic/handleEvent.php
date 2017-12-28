@@ -39,8 +39,8 @@ else
 
 function handleCustomerEvent()
 {
-	if($GLOBALS['eventkey'] == "V1001_CUSTOMER_STATE")
-	{
+	switch($GLOBALS['eventkey']){
+	case 'V1001_CUSTOMER_STATE':
 		if(is_file("data/talktmp/{$GLOBALS['from_openid']}"))
 		{
 			$jiedan_id = file_get_contents("data/talktmp/{$GLOBALS['from_openid']}"); 
@@ -55,6 +55,34 @@ function handleCustomerEvent()
 			$GLOBALS['nickname'] = "系统管理";
 		}
 		sendmsg();
+		break;
+	case 'V1001_CUSTOMER_DISCONNECT':
+	    if(is_file("data/talktmp/{$GLOBALS['from_openid']}"))
+		{
+			$jiedan_openid = file_get_contents("data/talktmp/{$GLOBALS['from_openid']}");
+			$jiedan_indexid = file_get_contents("data/jiedaninfo/$jiedan_openid/indexid");
+			unlink("data/talktmp/$jiedan_openid");
+			unlink("data/talktmp/{$GLOBALS['from_openid']}");
+			$GLOBALS['content'] = "与[妹子:$jiedan_indexid]的连接已经断开.";
+			$GLOBALS['to_openid'] = $GLOBALS['from_openid'];
+			$GLOBALS['nickname'] = "系统管理";
+			sendmsg();
+			
+			$GLOBALS['content'] = "与[顾客:{$GLOBALS['from_openid']}]的连接已经断开.";
+			$GLOBALS['to_openid'] = $jiedan_openid;
+			$GLOBALS['nickname'] = "系统管理";
+			sendmsg();
+			
+		}
+		else
+		{
+			$GLOBALS['content'] = "当前并没有连接，不需要断开！";
+			$GLOBALS['to_openid'] = $GLOBALS['from_openid'];
+			$GLOBALS['nickname'] = "系统管理";
+			sendmsg();
+		}
+	    break;
+		
 	}
 }
 
