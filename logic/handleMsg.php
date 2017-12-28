@@ -5,7 +5,8 @@ use EasyWeChat\Factory;
 
 $from_openid = $_GET['openid'];
 $to_openid ="";
-$nickname = $_GET['nickname'];
+//$nickname = $_GET['nickname'];
+$nickname = substr($from_openid,-5);
 $content = $_GET['content'];
 $options = [
     'app_id'    => 'wx6db36cbd7e005897',
@@ -27,6 +28,10 @@ $user = $app->user;
 if($content[0] == "@")
 {
     handleATmsg();
+}
+else
+{
+	handleCOMMONmsg();
 }
 
 function handleATmsg()
@@ -65,6 +70,20 @@ function handleATmsg()
 		$GLOBALS['nickname'] = "系统管理";
 	}
 	sendmsg();
+}
+
+function handleCOMMONmsg()
+{
+	if(is_file("data/talktmp/{$GLOBALS['from_openid']}"))
+	{
+		$jiedan_id = file_get_contents("data/talktmp/{$GLOBALS['from_openid']}");
+		$GLOBALS['to_openid'] = $jiedan_id;
+		sendmsg();
+	}
+	else
+	{
+		echo "error";
+	}
 }
 
 function sendmsg()
