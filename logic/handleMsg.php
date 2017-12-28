@@ -40,20 +40,29 @@ function handleATmsg()
 	if(is_numeric($jiedan_id)){
 		if(is_dir("data/jiedaninfo/$jiedan_id"))   //判断@xxx对应的数字id是否存在
 		{
-			$jiedan_openid = file_get_contents("data/jiedaninfo/$jiedan_id/openid");   //获取jiedan openid
-			if(is_file("data/talktmp/$jiedan_openid"))
+			if(is_file("data/online/$jiedan_id"))
 			{
-				$GLOBALS['content'] = "这个妹子现在正跟别人聊天！请稍等吧！";
-	            $GLOBALS['to_openid'] = $GLOBALS['from_openid'];   //回复信息给发送顾客
-		        $GLOBALS['nickname'] = "系统管理";
+				$jiedan_openid = file_get_contents("data/jiedaninfo/$jiedan_id/openid");   //获取jiedan openid
+				if(is_file("data/talktmp/$jiedan_openid"))
+				{
+					$GLOBALS['content'] = "这个妹子现在正跟别人聊天！请稍等吧！";
+					$GLOBALS['to_openid'] = $GLOBALS['from_openid'];   //回复信息给发送顾客
+					$GLOBALS['nickname'] = "系统管理";
+				}
+				else
+				{
+					$customer_openid = $GLOBALS['from_openid'];
+					file_put_contents("data/talktmp/$jiedan_openid", $customer_openid);
+					file_put_contents("data/talktmp/$customer_openid", $jiedan_openid);
+					$GLOBALS['to_openid'] = $jiedan_openid;    //to对象指向jiedan
+					$GLOBALS['content'] = "新的顾客请求与你交流！";
+				}
 			}
 			else
 			{
-				$customer_openid = $GLOBALS['from_openid'];
-				file_put_contents("data/talktmp/$jiedan_openid", $customer_openid);
-				file_put_contents("data/talktmp/$customer_openid", $jiedan_openid);
-				$GLOBALS['to_openid'] = $jiedan_openid;    //to对象指向jiedan
-				$GLOBALS['content'] = "新的顾客请求与你交流！";
+				$GLOBALS['content'] = "这个妹子没有在线哦！";
+				$GLOBALS['to_openid'] = $GLOBALS['from_openid'];   //回复信息给发送顾客
+				$GLOBALS['nickname'] = "系统管理";
 			}
 		}
 		else
