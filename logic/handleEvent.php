@@ -44,7 +44,8 @@ function handleCustomerEvent()
 		if(is_file("data/talktmp/{$GLOBALS['from_openid']}"))
 		{
 			$jiedan_id = file_get_contents("data/talktmp/{$GLOBALS['from_openid']}"); 
-			$GLOBALS['content'] = "当前正在与[$jiedan_id]连接中！";
+			$jiedan_indexid = file_get_contents("data/jiedaninfo/$jiedan_id/indexid");
+			$GLOBALS['content'] = "当前正在与[妹子:$jiedan_indexid]连接中！";
 			$GLOBALS['to_openid'] = $GLOBALS['from_openid'];
 			$GLOBALS['nickname'] = "系统管理";
 		}
@@ -68,7 +69,8 @@ function handleCustomerEvent()
 			$GLOBALS['nickname'] = "系统管理";
 			sendmsg();
 			
-			$GLOBALS['content'] = "与[顾客:{$GLOBALS['from_openid']}]的连接已经断开.";
+			$nickname = substr($GLOBALS['from_openid'],-5);
+			$GLOBALS['content'] = "与[顾客:$nickname]的连接已经断开.";
 			$GLOBALS['to_openid'] = $jiedan_openid;
 			$GLOBALS['nickname'] = "系统管理";
 			sendmsg();
@@ -102,7 +104,8 @@ function handleJiedanEvent()
 				else
 				{
 					$customer_id = file_get_contents("data/talktmp/{$GLOBALS['from_openid']}"); 
-					$GLOBALS['content'] = "在线状态\n当前正在与[顾客:$customer_id]对话中！";
+					$nickname = substr($customer_id,-5);
+					$GLOBALS['content'] = "在线状态\n当前正在与[顾客:$nickname]对话中！";
 					$GLOBALS['to_openid'] = $GLOBALS['from_openid'];
 					$GLOBALS['nickname'] = "系统管理";
 				}
@@ -159,9 +162,10 @@ function handleJiedanEvent()
 		    if(is_file("data/talktmp/{$GLOBALS['from_openid']}"))
 			{
 				$customer_openid = file_get_contents("data/talktmp/{$GLOBALS['from_openid']}");
+				$nickname = substr($customer_openid,-5);
 				unlink("data/talktmp/$customer_openid");
 				unlink("data/talktmp/{$GLOBALS['from_openid']}");
-				$GLOBALS['content'] = "与[$customer_openid]的连接已经断开.";
+				$GLOBALS['content'] = "与[$nickname]的连接已经断开.";
 				$GLOBALS['to_openid'] = $GLOBALS['from_openid'];
 				$GLOBALS['nickname'] = "系统管理";
 				sendmsg();
