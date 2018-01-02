@@ -5,7 +5,7 @@
  * Date: 2018/1/2
  * Time: 17:19
  */
-include "c:/vendor/autoload.php";
+include "../logic/vendor/autoload.php";
 
 use EasyWeChat\Factory;
 
@@ -35,7 +35,7 @@ $prepayId = null;
 if ($result['return_code'] == 'SUCCESS' && $result['result_code'] == 'SUCCESS'){
     $prepayId = $result['prepay_id']; // 这个很重要。有了这个才能调用支付。
     $codeUrl = $result['code_url'];
-	var_dump($codeUrl);
+	PHPQRCode\QRcode::png($codeUrl, "qrcode.png", 'L', 4, 2);
 } else {
     var_dump($result);
     die("出错了。");  // 出错就说出来，不然还能怎样？
