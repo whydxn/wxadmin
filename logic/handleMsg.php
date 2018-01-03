@@ -85,8 +85,16 @@ function handleCOMMONmsg()
 {
 	if(is_file("data/talktmp/{$GLOBALS['from_openid']}"))
 	{
-		$jiedan_id = file_get_contents("data/talktmp/{$GLOBALS['from_openid']}");
-		$GLOBALS['to_openid'] = $jiedan_id;
+		$GLOBALS['to_openid'] = file_get_contents("data/talktmp/{$GLOBALS['from_openid']}");
+		if(is_dir("data/jiedaninfo/{$GLOBALS['from_openid']}"))
+		{
+			$index_id = file_get_contents("data/jiedaninfo/{$GLOBALS['from_openid']}/indexid");
+			$GLOBALS['nickname'] = "[妹子:$index_id]";
+		}
+		else
+		{
+			$GLOBALS['nickname'] ='[顾客:'.$GLOBALS['nickname'].']';
+		}
 		sendmsg();
 	}
 	else
